@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Das perfekte Sauerteig-Topfbrot – Interaktive Backanleitung</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <!-- Google Fonts: Inter & Playfair Display für Bäckerei-Ästhetik -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        cream: '#FAF7F2',
+                        sand: '#F2ECE1',
+                        crust: '#B85D3B',
+                        crustDark: '#9A482A',
+                        crustLight: '#F6E8E2',
+                        slateDark: '#262320',
+                        slateMuted: '#635C55',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Sanfte Übergänge für Checkboxen & Fortschrittsbalken */
+        .check-item:checked + label .item-title,
+        .check-item:checked + label .item-text {
+            text-decoration: line-through;
+            color: #9A928A;
+        }
+        .check-item:checked + label .step-badge {
+            background-color: #10B981;
+            color: white;
+            border-color: #10B981;
+        }
+        /* Benutzerdefinierte Checkbox-Optik */
+        input[type="checkbox"] {
+            accent-color: #B85D3B;
+        }
+    </style>
+</head>
+<body class="bg-cream text-slateDark font-sans antialiased selection:bg-crustLight selection:text-crustDark pb-16">
+
+    <!-- Sticky Top-Fortschrittsleiste -->
+    <div class="sticky top-0 z-40 bg-cream/95 backdrop-blur-md border-b border-stone-200 shadow-sm">
+        <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3 flex-1">
+                <span class="text-xs font-semibold uppercase tracking-wider text-slateMuted whitespace-nowrap">Fortschritt</span>
+                <div class="w-full bg-stone-200 rounded-full h-2.5 overflow-hidden">
+                    <div id="progress-bar" class="bg-crust h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+                <span id="progress-text" class="text-xs font-bold text-crust whitespace-nowrap">0%</span>
+            </div>
+            <button onclick="openResetModal()" class="text-xs font-medium text-slateMuted hover:text-crustDark px-2.5 py-1.5 rounded-lg border border-stone-300 hover:border-crust transition-colors whitespace-nowrap">
+                Zurücksetzen
+            </button>
+        </div>
+    </div>
+
+    <!-- Hauptcontainer -->
+    <main class="max-w-3xl mx-auto px-4 pt-8 sm:pt-12 space-y-8">
+
+        <!-- 1. Header -->
+        <header class="text-center space-y-4">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-crustLight text-crustDark text-xs font-semibold tracking-wide uppercase">
+                <span>Handwerkliche Bäckerei-Anleitung</span>
+            </div>
+            <h1 class="font-serif text-3xl sm:text-5xl font-bold text-slateDark leading-tight">
+                Das perfekte Sauerteig-Topfbrot
+            </h1>
+            <p class="text-slateMuted max-w-xl mx-auto text-sm sm:text-base leading-relaxed">
+                Knusprige Bäckerei-Kruste und saftige Krume aus dem eigenen Ofen – entspannt aufgeteilt auf zwei Tage mit minimaler aktiver Arbeitszeit.
+            </p>
+
+            <!-- Eckdaten-Karten -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 text-left">
+                <div class="bg-white p-4 rounded-2xl border border-stone-200/80 shadow-sm flex items-center gap-3.5">
+                    <div class="w-10 h-10 rounded-xl bg-crustLight text-crust flex items-center justify-center shrink-0">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slateMuted font-medium">Aktive Arbeitszeit</div>
+                        <div class="font-bold text-slateDark text-sm sm:text-base">ca. 25–30 Min.</div>
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border border-stone-200/80 shadow-sm flex items-center gap-3.5">
+                    <div class="w-10 h-10 rounded-xl bg-crustLight text-crust flex items-center justify-center shrink-0">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slateMuted font-medium">Gesamtzeit (inkl. Ruhe)</div>
+                        <div class="font-bold text-slateDark text-sm sm:text-base">ca. 24–28 Stunden</div>
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border border-stone-200/80 shadow-sm flex items-center gap-3.5">
+                    <div class="w-10 h-10 rounded-xl bg-crustLight text-crust flex items-center justify-center shrink-0">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slateMuted font-medium">Equipment</div>
+                        <div class="font-bold text-slateDark text-sm sm:text-base">Topf, Körbchen, Waage, Thermometer</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- 2. Einkaufs- & Mehlliste -->
+        <section class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200/80 shadow-sm space-y-5">
+            <div class="flex items-center justify-between border-b border-stone-100 pb-4">
+                <div>
+                    <h2 class="font-serif text-2xl font-bold text-slateDark">Einkaufs- & Mehlliste</h2>
+                    <p class="text-xs sm:text-sm text-slateMuted mt-0.5">Die ideale Grundausstattung für Teig, Starter und Gärkörbchen</p>
+                </div>
+                <span class="text-2xl" aria-hidden="true">🌾</span>
+            </div>
+
+            <ul class="space-y-3">
+                <li class="flex items-start gap-3 p-2.5 rounded-xl hover:bg-cream/60 transition-colors">
+                    <input type="checkbox" id="shop-1" data-save="shop-1" class="check-item mt-1 w-5 h-5 rounded cursor-pointer shrink-0">
+                    <label for="shop-1" class="cursor-pointer flex-1 select-none">
+                        <span class="item-title font-semibold text-slateDark block">Weizenmehl Type 550 (1 kg)</span>
+                        <span class="item-text text-xs sm:text-sm text-slateMuted">Dein Hauptmehl. Hat mehr Klebereiweiß als 405er, das für diesen Teig zu schwach ist.</span>
+                    </label>
+                </li>
+                <li class="flex items-start gap-3 p-2.5 rounded-xl hover:bg-cream/60 transition-colors">
+                    <input type="checkbox" id="shop-2" data-save="shop-2" class="check-item mt-1 w-5 h-5 rounded cursor-pointer shrink-0">
+                    <label for="shop-2" class="cursor-pointer flex-1 select-none">
+                        <span class="item-title font-semibold text-slateDark block">Roggenmehl Type 1150 (1 kg)</span>
+                        <span class="item-text text-xs sm:text-sm text-slateMuted">Für das typisch herzhafte Brotaroma im Teig und perfekt zum Füttern deines Starters.</span>
+                    </label>
+                </li>
+                <li class="flex items-start gap-3 p-2.5 rounded-xl hover:bg-cream/60 transition-colors">
+                    <input type="checkbox" id="shop-3" data-save="shop-3" class="check-item mt-1 w-5 h-5 rounded cursor-pointer shrink-0">
+                    <label for="shop-3" class="cursor-pointer flex-1 select-none">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="item-title font-semibold text-slateDark">Reismehl</span>
+                            <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">Geheimtipp</span>
+                        </div>
+                        <span class="item-text text-xs sm:text-sm text-slateMuted block mt-0.5">Zum Bestäuben des Gärkörbchens (enthält kein Gluten – verhindert zuverlässig das Festkleben).</span>
+                    </label>
+                </li>
+                <li class="flex items-start gap-3 p-2.5 rounded-xl hover:bg-cream/60 transition-colors">
+                    <input type="checkbox" id="shop-4" data-save="shop-4" class="check-item mt-1 w-5 h-5 rounded cursor-pointer shrink-0">
+                    <label for="shop-4" class="cursor-pointer flex-1 select-none">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="item-title font-semibold text-slateDark">Weizen- oder Dinkelvollkornmehl</span>
+                            <span class="text-[11px] font-medium px-2 py-0.5 rounded-full bg-stone-100 text-slateMuted">Optional</span>
+                        </div>
+                        <span class="item-text text-xs sm:text-sm text-slateMuted block mt-0.5">Falls du einen Teil des hellen 550er Mehls für eine rustikalere Note ersetzen möchtest. Vollkorn zieht mehr Wasser, nimm dann ca. 10–20 g mehr.</span>
+                    </label>
+                </li>
+            </ul>
+        </section>
+
+        <!-- 3. Zutaten & Mengen -->
+        <section class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200/80 shadow-sm space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-100 pb-4">
+                <div>
+                    <h2 class="font-serif text-2xl font-bold text-slateDark">Zutaten & Mengen</h2>
+                    <p class="text-xs sm:text-sm text-slateMuted mt-0.5">Alles vor dem Mischen abwiegen und abhaken, Mehl zuerst</p>
+                </div>
+
+                <!-- Multiplikator-Toggle (1 Brot vs. 2 Brote) -->
+                <div class="inline-flex rounded-xl bg-sand p-1 self-start sm:self-auto" role="group" aria-label="Anzahl Brote wählen">
+                    <button type="button" id="btn-1-loaf" onclick="setMultiplier(1)" class="px-4 py-1.5 text-xs sm:text-sm font-semibold rounded-lg bg-crust text-white shadow-sm transition-all">
+                        1 Brot
+                    </button>
+                    <button type="button" id="btn-2-loaves" onclick="setMultiplier(2)" class="px-4 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slateMuted hover:text-slateDark transition-all">
+                        2 Brote
+                    </button>
+                </div>
+            </div>
+
+            <p id="two-loaf-hint" class="hidden text-xs sm:text-sm text-crustDark bg-crustLight rounded-xl p-3 leading-relaxed">
+                <strong>Bei 2 Broten:</strong> Nach der Stockgare den Teig in zwei gleiche Stücke (je ca. 960 g) teilen und einzeln formen. Gebacken wird nacheinander im selben Topf (zwischendurch 10 Min. wieder auf 250 °C aufheizen) oder gleichzeitig in zwei Töpfen. Der zweite Teigling bleibt bis dahin im Kühlschrank.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Vorteig (Levain) -->
+                <div class="bg-cream/70 rounded-2xl p-5 border border-stone-200/60 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-slateDark text-base">1. Vorteig (Levain)</h3>
+                        <span class="text-xs font-medium text-crust bg-crustLight px-2.5 py-0.5 rounded-full">Ergibt <span data-base="125">125</span> g</span>
+                    </div>
+                    <p class="text-xs text-slateMuted">Ergibt die Menge für den Teig plus <span data-base="25">25</span> g Reserve. Die ist dein Starter fürs nächste Brot.</p>
+                    <ul class="space-y-2.5 pt-1">
+                        <li class="flex items-center gap-3">
+                            <input type="checkbox" id="ing-lev-1" data-save="ing-lev-1" class="check-item w-4 h-4 rounded cursor-pointer shrink-0">
+                            <label for="ing-lev-1" class="cursor-pointer text-sm select-none">
+                                <span class="item-text"><strong class="font-semibold"><span data-base="25">25</span> g</strong> aktiver Sauerteigstarter</span>
+                            </label>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <input type="checkbox" id="ing-lev-2" data-save="ing-lev-2" class="check-item w-4 h-4 rounded cursor-pointer shrink-0">
+                            <label for="ing-lev-2" class="cursor-pointer text-sm select-none">
+                                <span class="item-text"><strong class="font-semibold"><span data-base="50">50</span> g</strong> Mehl (Weizen 550 oder Roggen 1150; Vollkorn braucht ca. 10–15 g mehr Wasser)</span>
+                            </label>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <input type="checkbox" id="ing-lev-3" data-save="ing-lev-3" class="check-item w-4 h-4 rounded cursor-pointer shrink-0">
+                            <label for="ing-lev-3" class="cursor-pointer text-sm select-none">
+                                <span class="item-text"><strong class="font-semibold"><span data-base="50">50</span> g</strong> lauwarmes Wasser</span>
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Hauptteig -->
+                <div class="bg-cream/70 rounded-2xl p-5 border border-stone-200/60 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-slateDark text-base">2. Hauptteig</h3>
+                        <span class="text-xs font-medium text-slateMuted bg-white px-2.5 py-0.5 rounded-full border border-stone-200">ca. <span data-base="960">960</span> g Teig</span>
+                    </div>
+                    <ul class="space-y-2.5 pt-1">
+                        <li class="flex items-start gap-3">
+                            <input type="checkbox" id="ing-main-1" data-save="ing-main-1" class="check-item mt-0.5 w-4 h-4 rounded cursor-pointer shrink-0">
+                            <label for="ing-main-1" class="cursor-pointer text-sm select-none">
+                                <span class="item-text"><strong class="font-semibold"><span data-base="100">100</span> g</strong> aktiver Sauerteig (aus dem Levain)</span>
+                            </label>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <input type="checkbox" id="ing-main-2" data-save="ing-main-2" class="check-item mt-0.5 w-4 h-4 rounded cursor-pointer shrink-0">
+                            <label for="ing-main-2" class="cursor-pointer text-sm select-none">
+                                <span class="item-text"><strong class="font-semibold"><span data-base="350">350</span> g</strong> lauwarmes Wasser (davon <span data-base="30">30</span> g zurückhalten)</span>
+                            </label>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <input type="checkbox" id="ing-main-3" data-save="ing-main-3" class="check-item mt-0.5 w-4 h-4 rounded cursor-pointer shrink-0">
+                            <label for="ing-main-3" class="cursor-pointer text-sm select-none">
+                                <span class="item-text"><strong class="font-semibold"><span data-base="450">450</span> g</strong> Weizenmehl Type 550 <span class="text-xs text-slateMuted block">(oder <span data-base="300">300</span> g 550er + <span data-base="150">150</span> g Vollkornmehl)</span></span>
+                            </label>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <input type="checkbox" id="ing-main-4" data-save="ing-main-4" class="check-item mt-0.5 w-4 h-4 rounded cursor-pointer shrink-0">
+                            <label for="ing-main-4" class="cursor-pointer text-sm select-none">
+                                <span class="item-text"><strong class="font-semibold"><span data-base="50">50</span> g</strong> Roggenmehl Type 1150</span>
+                            </label>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <input type="checkbox" id="ing-main-5" data-save="ing-main-5" class="check-item mt-0.5 w-4 h-4 rounded cursor-pointer shrink-0">
+                            <label for="ing-main-5" class="cursor-pointer text-sm select-none">
+                                <span class="item-text"><strong class="font-semibold"><span data-base="10">10</span>–<span data-base="12">12</span> g</strong> Salz</span>
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Zeitplan-Generator -->
+        <section class="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200/80 shadow-sm space-y-5">
+            <div class="flex items-center justify-between border-b border-stone-100 pb-4">
+                <div>
+                    <h2 class="font-serif text-2xl font-bold text-slateDark">Mein Zeitplan</h2>
+                    <p class="text-xs sm:text-sm text-slateMuted mt-0.5">Wähle Start oder Fertigzeit, die Uhrzeiten rechnen sich von selbst aus.</p>
+                </div>
+                <span class="text-2xl" aria-hidden="true">🕒</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-2.5">
+                <button type="button" id="tp-mode-start" onclick="tpSetMode('start')">Ich starte um</button>
+                <button type="button" id="tp-mode-end" onclick="tpSetMode('end')">Fertig um</button>
+                <input type="time" id="tp-time" value="09:00" class="rounded-xl border border-stone-200 px-3 py-2 text-sm bg-white">
+                <span class="text-sm text-slateMuted">am</span>
+                <input type="date" id="tp-date" class="rounded-xl border border-stone-200 px-3 py-2 text-sm bg-white">
+                <button type="button" onclick="tpRender()" class="px-4 py-2 text-sm font-semibold rounded-full bg-crust hover:bg-crustDark text-white transition-colors">Zeitplan anpassen</button>
+            </div>
+            <p class="text-xs text-slateMuted leading-relaxed">„Ich starte um“ ist der Levain-Ansatz, „Fertig um“ der Moment, in dem das Brot aus dem Ofen kommt. Gerechnet wird mit warmem Gärplatz (24–28 °C, z. B. Ofen mit Licht) und 12 Std. Kühlschrank. In einer kühlen Küche brauchen Levain und Stockgare länger, setz den Levain dann lieber am Vorabend an. Immer am Volumen prüfen.</p>
+            <div id="tp-out" class="space-y-5"></div>
+        </section>
+
+        <!-- 4. Interaktiver Schritt-für-Schritt Zeitplan -->
+        <section class="space-y-6">
+            <div class="px-1">
+                <h2 class="font-serif text-2xl sm:text-3xl font-bold text-slateDark">Schritt-für-Schritt Backplan</h2>
+                <p class="text-xs sm:text-sm text-slateMuted mt-1">Hake jeden erledigten Schritt ab – dein Fortschritt wird automatisch gespeichert.</p>
+            </div>
+
+            <!-- TAG 1 -->
+            <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                    <span class="px-3.5 py-1 rounded-full bg-slateDark text-white text-xs font-bold uppercase tracking-wider">Tag 1</span>
+                    <span class="text-sm font-semibold text-slateMuted">Vorteig, Teigbereitung & Übernachtgare</span>
+                    <div class="h-px bg-stone-200 flex-1"></div>
+                </div>
+
+                <!-- Schritt 1 -->
+                <div class="bg-white rounded-2xl p-5 sm:p-6 border border-stone-200/80 shadow-sm transition-all hover:border-crust/40">
+                    <div class="flex items-start gap-4">
+                        <input type="checkbox" id="step-1" data-save="step-1" class="check-item mt-1 w-6 h-6 rounded-md cursor-pointer shrink-0">
+                        <label for="step-1" class="cursor-pointer flex-1 select-none space-y-2">
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <span class="item-title font-bold text-lg text-slateDark">1. Vorteig (Levain) ansetzen</span>
+                                <span class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-sand text-slateDark">⏱ 5–12 Std. vor Teigstart</span>
+                            </div>
+                            <p class="item-text text-sm text-slateMuted leading-relaxed">
+                                Verrühre <strong><span data-base="25">25</span> g Starter</strong>, <strong><span data-base="50">50</span> g Mehl</strong> und <strong><span data-base="50">50</span> g lauwarmes Wasser</strong> klümpchenfrei in einem Glas und markiere die Füllhöhe mit einem Gummiband. Reif ist der Levain, wenn er sich <strong>mindestens verdoppelt</strong> hat, die Oberfläche gewölbt ist und viele Bläschen zeigt, bevor die Kuppe einfällt. Das dauert bei 24 °C ca. 5–8 Std., bei 20 °C eher 8–12 Std. Geh nach Volumen, nicht nach Uhr. <br>
+                                <span class="inline-block mt-1.5 text-slateDark font-medium">💡 Wichtig:</span> Starter aus dem Kühlschrank oder länger nicht gefüttert? Vorher 1–2× auffrischen, ein träger Starter ist der häufigste Grund für flache Brote. Zu kühl? Stell das Glas in den Ofen mit eingeschaltetem Licht (25–28 °C, nicht wärmer).
+                            </p>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Schritt 2 -->
+                <div class="bg-white rounded-2xl p-5 sm:p-6 border border-stone-200/80 shadow-sm transition-all hover:border-crust/40">
+                    <div class="flex items-start gap-4">
+                        <input type="checkbox" id="step-2" data-save="step-2" class="check-item mt-1 w-6 h-6 rounded-md cursor-pointer shrink-0">
+                        <label for="step-2" class="cursor-pointer flex-1 select-none space-y-2">
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <span class="item-title font-bold text-lg text-slateDark">2. Hauptteig mischen & ruhen (Fermentolyse)</span>
+                                <span class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-sand text-slateDark">⏱ 3 Min. Arbeit + 30 Min. Ruhe</span>
+                            </div>
+                            <p class="item-text text-sm text-slateMuted leading-relaxed">
+                                Löse <strong><span data-base="100">100</span> g aktiven Sauerteig</strong> in <strong><span data-base="320">320</span> g</strong> ca. 30 °C warmem Wasser auf (die restlichen <span data-base="25">25</span> g im Glas sind dein neuer Starter: einige Stunden stehen lassen, dann in den Kühlschrank). Gib die Mehle dazu und vermenge alles mit der Hand (oder dem Knethaken, niedrigste Stufe, ca. 1 Min.), bis kein trockenes Mehl mehr zu sehen ist. <strong>30 Minuten abgedeckt ruhen lassen</strong>, damit sich das Klebergerüst von selbst bildet. Das Salz kommt bewusst erst danach. <br>
+                                <span class="inline-block mt-1.5 text-slateDark font-medium">📍 Wo:</span> In der Schüssel, nichts bemehlen.
+                            </p>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Schritt 3 -->
+                <div class="bg-white rounded-2xl p-5 sm:p-6 border border-stone-200/80 shadow-sm transition-all hover:border-crust/40">
+                    <div class="flex items-start gap-4">
+                        <input type="checkbox" id="step-3" data-save="step-3" class="check-item mt-1 w-6 h-6 rounded-md cursor-pointer shrink-0">
+                        <label for="step-3" class="cursor-pointer flex-1 select-none space-y-2">
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <span class="item-title font-bold text-lg text-slateDark">3. Salz einkneten & Stockgare</span>
+                                <span class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-sand text-slateDark">⏱ 4–8 Std. je nach Wärme</span>
+                            </div>
+                            <p class="item-text text-sm text-slateMuted leading-relaxed">
+                                Gib <strong><span data-base="10">10</span>–<span data-base="12">12</span> g Salz</strong> und die zurückgehaltenen <span data-base="30">30</span> g Wasser zum Teig und knete beides 2–3 Minuten ein (Teig durchquetschen, dabei Mehlklümpchen zerdrücken). Ist der Teig schon sehr weich und flach, lass das Wasser weg. Dann abgedeckt gehen lassen: bei 21–24 °C ca. 4–6 Std., in einer kühleren Küche länger oder im Ofen mit Licht. Entscheidend ist das Volumen: Der Teig soll um etwa <strong>50 %</strong> wachsen (nicht verdoppeln, im Kühlschrank geht er weiter), luftig-wabbelig sein und Bläschen am Rand zeigen. Prüf ab ca. 4 Std. <br>
+                                <span class="inline-block mt-1.5 text-slateDark font-medium">💡 Wichtig:</span> In den ersten 2 Stunden alle 30 Minuten dehnen &amp; falten (<em>Stretch &amp; Fold</em>: Seite hochziehen, zur Mitte falten, Schüssel drehen, 4×, ca. 30 Sek. pro Runde). Danach in Ruhe lassen. <br>
+                                <span class="inline-block mt-1.5 text-slateDark font-medium">📍 Wo:</span> Alles in der Schüssel, mit nassen Händen statt Mehl.
+                            </p>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Schritt 4 -->
+                <div class="bg-white rounded-2xl p-5 sm:p-6 border border-stone-200/80 shadow-sm transition-all hover:border-crust/40">
+                    <div class="flex items-start gap-4">
+                        <input type="checkbox" id="step-4" data-save="step-4" class="check-item mt-1 w-6 h-6 rounded-md cursor-pointer shrink-0">
+                        <label for="step-4" class="cursor-pointer flex-1 select-none space-y-2">
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <span class="item-title font-bold text-lg text-slateDark">4. Formen & Stückgare über Nacht</span>
+                                <span class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-sand text-slateDark">❄️ 8–16 Std. im Kühlschrank</span>
+                            </div>
+                            <p class="item-text text-sm text-slateMuted leading-relaxed">
+                                Bestäube dein Gärkörbchen großzügig mit <strong>Reismehl</strong>, bis die Rillen kaum noch zu sehen sind. Stürze den Teig auf die dünn bemehlte Arbeitsfläche, falte die Ränder zur Mitte und forme eine lose Kugel (Vorformen). <strong>20–30 Minuten abgedeckt entspannen lassen</strong>, dann straff rundwirken. Lege den Teigling <strong>mit der glatten Seite nach unten</strong> (Schluss oben) ins Körbchen, drück den Schluss zu, decke ihn mit Duschhaube oder Gefrierbeutel ab (kein feuchtes Tuch, das klebt fest) und stelle ihn für <strong>8–16 Stunden in den Kühlschrank</strong>. <br>
+                                <span class="inline-block mt-1.5 text-slateDark font-medium">💡 Zu weich zum Formen?</span> Dann stell die ganze Schüssel 1–2 Std. in den Kühlschrank und forme den kalten Teig. <br>
+                                <span class="inline-block mt-1.5 text-slateDark font-medium">📍 Wo:</span> Arbeitsfläche und Hände nur dünn mit Weizenmehl bestäuben (zu viel Mehl lässt den Teig rutschen). Die Teigkarte hilft beim Rundwirken.
+                            </p>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAG 2 -->
+            <div class="space-y-4 pt-4">
+                <div class="flex items-center gap-3">
+                    <span class="px-3.5 py-1 rounded-full bg-crust text-white text-xs font-bold uppercase tracking-wider">Tag 2</span>
+                    <span class="text-sm font-semibold text-slateMuted">Backen im Gusseisentopf & Auskühlen</span>
+                    <div class="h-px bg-stone-200 flex-1"></div>
+                </div>
+
+                <!-- Schritt 5 -->
+                <div class="bg-white rounded-2xl p-5 sm:p-6 border border-stone-200/80 shadow-sm transition-all hover:border-crust/40">
+                    <div class="flex items-start gap-4">
+                        <input type="checkbox" id="step-5" data-save="step-5" class="check-item mt-1 w-6 h-6 rounded-md cursor-pointer shrink-0">
+                        <label for="step-5" class="cursor-pointer flex-1 select-none space-y-2">
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <span class="item-title font-bold text-lg text-slateDark">5. Ofen & Gusseisentopf vorheizen</span>
+                                <span class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-crustLight text-crustDark">🔥 45–60 Min. bei 250 °C</span>
+                            </div>
+                            <p class="item-text text-sm text-slateMuted leading-relaxed">
+                                Stelle den leeren <strong>Gusseisentopf inklusive Deckel</strong> auf den untersten Rost in den noch kalten Backofen und heize auf <strong>250 °C Ober-/Unterhitze</strong>. Die 45–60 Minuten zählen ab dem Einschalten, der Topf muss am Ende glühend heiß sein. <br>
+                                <span class="inline-block mt-1.5 text-slateDark font-medium">⚠️ Check:</span> Kunststoffknäufe am Deckel halten oft nur 180–200 °C. Gegen einen Metallknauf tauschen oder prüfen, ob er 250 °C aushält.
+                            </p>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Schritt 6 -->
+                <div class="bg-white rounded-2xl p-5 sm:p-6 border border-stone-200/80 shadow-sm transition-all hover:border-crust/40">
+                    <div class="flex items-start gap-4">
+                        <input type="checkbox" id="step-6" data-save="step-6" class="check-item mt-1 w-6 h-6 rounded-md cursor-pointer shrink-0">
+                        <label for="step-6" class="cursor-pointer flex-1 select-none space-y-2">
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <span class="item-title font-bold text-lg text-slateDark">6. Stürzen, Einschneiden & Phase 1 Backen</span>
+                                <span class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-crustLight text-crustDark">🔥 20 Min. mit Deckel (230 °C)</span>
+                            </div>
+                            <p class="item-text text-sm text-slateMuted leading-relaxed">
+                                Hole den kalten Teig erst jetzt aus dem Kühlschrank und mach den <strong>Fingertest</strong> (mehlbestäubter Finger, 1 cm tief): Federt die Delle langsam und nur halb zurück, ist er bereit. Springt sie sofort zurück, braucht er noch 30–60 Min. bei Raumtemperatur, bleibt sie stehen, sofort backen. Stürze ihn auf Backpapier und schneide ihn mit einer Rasierklinge oder einem sehr scharfen Messer <strong>0,5–1 cm tief schräg ein</strong> (flacher Winkel, ein zügiger Schnitt). Schneide überstehendes Papier ab, sonst verbrennt es am Deckelrand. Hebe den heißen Topf heraus (Ofenhandschuhe!), lass den Teig samt Papier hineingleiten, setze den <strong>Deckel sofort auf</strong>, <strong>stelle den Ofen auf 230 °C zurück</strong> und backe <strong>20 Minuten</strong>. Wird der Boden zu dunkel, beim nächsten Mal den Topf eine Schiene höher oder ein Backblech darunter.
+                            </p>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Schritt 7 -->
+                <div class="bg-white rounded-2xl p-5 sm:p-6 border border-stone-200/80 shadow-sm transition-all hover:border-crust/40">
+                    <div class="flex items-start gap-4">
+                        <input type="checkbox" id="step-7" data-save="step-7" class="check-item mt-1 w-6 h-6 rounded-md cursor-pointer shrink-0">
+                        <label for="step-7" class="cursor-pointer flex-1 select-none space-y-2">
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <span class="item-title font-bold text-lg text-slateDark">7. Phase 2 Kruste & Auskühlen</span>
+                                <span class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-crustLight text-crustDark">🔥 20–30 Min. ohne Deckel (220 °C)</span>
+                            </div>
+                            <p class="item-text text-sm text-slateMuted leading-relaxed">
+                                Nimm den Deckel vorsichtig ab (Achtung: heißer Dampf!), stelle den Ofen auf <strong>220 °C</strong> und backe weitere <strong>20–30 Minuten</strong>, bis die Kruste tief dunkelbraun ist. Entscheidend ist die <strong>Kerntemperatur von 96–98 °C</strong> (Thermometer in die Mitte). Ist die Kruste schon dunkel, der Kern aber noch zu kalt, backe bei 200 °C weiter. Sehr nasse Teige brauchen oft länger als 45 Minuten. Ohne Thermometer klingt der Boden beim Klopfen hohl. Nimm das Brot sofort aus dem Topf und lass es auf einem Kuchengitter <strong>mindestens 1–2 Stunden komplett auskühlen</strong>, bevor du es anschneidest, sonst wird die Krume gummiartig.
+                            </p>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Bestätigungs-Modal für Zurücksetzen (kein alert/confirm) -->
+    <div id="reset-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-xl border border-stone-200 space-y-4">
+            <h3 class="font-serif text-xl font-bold text-slateDark">Checkliste zurücksetzen?</h3>
+            <p class="text-sm text-slateMuted">Möchtest du wirklich alle gesetzten Häkchen löschen und die Anleitung für dein nächstes Brot neu starten?</p>
+            <div class="flex justify-end gap-2.5 pt-2">
+                <button onclick="closeResetModal()" class="px-4 py-2 text-sm font-medium text-slateMuted hover:text-slateDark rounded-xl hover:bg-stone-100 transition-colors">
+                    Abbrechen
+                </button>
+                <button onclick="confirmReset()" class="px-4 py-2 text-sm font-semibold bg-crust hover:bg-crustDark text-white rounded-xl transition-colors">
+                    Ja, zurücksetzen
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'sourdough_recipe_checklist_v1';
+        const MULTIPLIER_KEY = 'sourdough_recipe_multiplier_v1';
+
+        // Initialisierung beim Laden der Seite
+        document.addEventListener('DOMContentLoaded', () => {
+            loadState();
+            attachListeners();
+            updateProgress();
+        });
+
+        // Event-Listener für alle Checkboxen registrieren
+        function attachListeners() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"][data-save]');
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', () => {
+                    saveState();
+                    updateProgress();
+                });
+            });
+        }
+
+        // Zustand im localStorage speichern
+        function saveState() {
+            const state = {};
+            const checkboxes = document.querySelectorAll('input[type="checkbox"][data-save]');
+            checkboxes.forEach(cb => {
+                state[cb.dataset.save] = cb.checked;
+            });
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            } catch (e) {
+                console.warn('localStorage nicht verfügbar:', e);
+            }
+        }
+
+        // Zustand aus localStorage laden
+        function loadState() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    const state = JSON.parse(saved);
+                    Object.keys(state).forEach(key => {
+                        const cb = document.querySelector(`input[data-save="${key}"]`);
+                        if (cb) cb.checked = Boolean(state[key]);
+                    });
+                }
+                const savedMult = localStorage.getItem(MULTIPLIER_KEY);
+                if (savedMult) {
+                    setMultiplier(parseInt(savedMult, 10) || 1, false);
+                }
+            } catch (e) {
+                console.warn('Fehler beim Laden des Zustands:', e);
+            }
+        }
+
+        // Fortschrittsbalken berechnen (bezogen auf alle abhakbaren Punkte)
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"][data-save]');
+            const total = checkboxes.length;
+            const checked = Array.from(checkboxes).filter(cb => cb.checked).length;
+            const percent = total > 0 ? Math.round((checked / total) * 100) : 0;
+
+            document.getElementById('progress-bar').style.width = percent + '%';
+            document.getElementById('progress-text').textContent = percent + '%';
+        }
+
+        // Mengen-Multiplikator (1 Brot vs. 2 Brote)
+        function setMultiplier(mult, persist = true) {
+            const elements = document.querySelectorAll('[data-base]');
+            elements.forEach(el => {
+                const base = parseFloat(el.dataset.base);
+                if (!isNaN(base)) {
+                    el.textContent = base * mult;
+                }
+            });
+
+            document.getElementById('two-loaf-hint').classList.toggle('hidden', mult !== 2);
+
+            const btn1 = document.getElementById('btn-1-loaf');
+            const btn2 = document.getElementById('btn-2-loaves');
+
+            if (mult === 1) {
+                btn1.className = 'px-4 py-1.5 text-xs sm:text-sm font-semibold rounded-lg bg-crust text-white shadow-sm transition-all';
+                btn2.className = 'px-4 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slateMuted hover:text-slateDark transition-all';
+            } else {
+                btn2.className = 'px-4 py-1.5 text-xs sm:text-sm font-semibold rounded-lg bg-crust text-white shadow-sm transition-all';
+                btn1.className = 'px-4 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slateMuted hover:text-slateDark transition-all';
+            }
+
+            if (persist) {
+                try {
+                    localStorage.setItem(MULTIPLIER_KEY, String(mult));
+                } catch (e) {}
+            }
+        }
+
+        // Modal-Steuerung für Reset
+        function openResetModal() {
+            const modal = document.getElementById('reset-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeResetModal() {
+            const modal = document.getElementById('reset-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function confirmReset() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"][data-save]');
+            checkboxes.forEach(cb => cb.checked = false);
+            saveState();
+            updateProgress();
+            closeResetModal();
+        }
+    </script>
+<script>
+(function () {
+    var P = { lev: 360, bulk: 300 };
+    var FR = 720, mode = 'start';
+    function $(i) { return document.getElementById(i); }
+    function pad(n) { return String(n).padStart(2, '0'); }
+    function tm(d) { return pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+    function dl(d, long) {
+        return d.toLocaleDateString('de-DE', long ? { weekday: 'short', day: '2-digit', month: '2-digit' } : { weekday: 'short' });
+    }
+    window.tpSetMode = function (m) { mode = m; window.tpRender(); };
+    window.tpRender = function () {
+        var on = 'px-4 py-2 text-sm font-semibold rounded-full border border-crust bg-crust text-white transition-colors';
+        var off = 'px-4 py-2 text-sm font-semibold rounded-full border border-crust bg-white text-crust hover:bg-crustLight transition-colors';
+        $('tp-mode-start').className = mode === 'start' ? on : off;
+        $('tp-mode-end').className = mode === 'end' ? on : off;
+        var out = $('tp-out'), t = $('tp-time').value, d = $('tp-date').value;
+        if (!t || !d) { out.innerHTML = '<p class="text-sm text-slateMuted">Bitte Uhrzeit und Datum wählen.</p>'; return; }
+        var q = P;
+        var salt = q.lev + 30, bulk = salt + q.bulk, shape = bulk + 25, fr = shape + 10;
+        var oven = fr + FR, b1 = oven + 45, b2 = b1 + 20, done = b2 + 25;
+        var S = [
+            [0, 'Levain ansetzen'],
+            [q.lev, 'Hauptteig mischen, 30 Min. ruhen lassen'],
+            [salt, 'Salz &amp; Reservewasser einkneten'],
+            [salt + 30, 'Dehnen &amp; Falten (1/4)'],
+            [salt + 60, 'Dehnen &amp; Falten (2/4)'],
+            [salt + 90, 'Dehnen &amp; Falten (3/4)'],
+            [salt + 120, 'Dehnen &amp; Falten (4/4)'],
+            [bulk, 'Stockgare prüfen (Volumen +50–75 %), dann vorformen'],
+            [shape, 'Endformen, ins Körbchen'],
+            [fr, 'Teig in den Kühlschrank'],
+            [oven, 'Ofen mit Topf auf 250 °C einschalten'],
+            [b1, 'Teig stürzen, einschneiden, mit Deckel backen (230 °C)'],
+            [b2, 'Deckel ab, weiterbacken (220 °C)'],
+            [done, 'Kerntemperatur prüfen (96–98 °C), Brot raus'],
+            [done + 90, 'Auskühlen lassen, dann anschneiden']
+        ];
+        var base = new Date(d + 'T' + t + ':00').getTime();
+        var T0 = mode === 'start' ? base : base - done * 60000;
+        var groups = [['Vortag', []], ['Backtag', []]];
+        S.forEach(function (e) { groups[e[0] < oven ? 0 : 1][1].push(e); });
+        var html = '';
+        groups.forEach(function (g) {
+            if (!g[1].length) return;
+            var first = new Date(T0 + g[1][0][0] * 60000);
+            html += '<div class="space-y-2"><div class="flex items-center gap-3"><span class="px-3.5 py-1 rounded-full ' +
+                (g[0] === 'Vortag' ? 'bg-slateDark' : 'bg-crust') + ' text-white text-xs font-bold uppercase tracking-wider">' + g[0] +
+                '</span><span class="text-sm font-semibold text-slateMuted">' + dl(first, true) + '</span><div class="h-px bg-stone-200 flex-1"></div></div><ol class="space-y-1.5">';
+            g[1].forEach(function (e, i) {
+                var dt = new Date(T0 + e[0] * 60000);
+                var extra = dt.toDateString() !== first.toDateString() ? ' <span class="text-xs text-slateMuted">(' + dl(dt, false) + ')</span>' : '';
+                html += '<li class="flex gap-3 p-2.5 rounded-xl bg-cream/60 text-sm"><span class="text-slateMuted w-5 shrink-0">' + (i + 1) +
+                    '.</span><span class="font-semibold text-slateDark shrink-0 w-28">' + tm(dt) + ' Uhr' + extra +
+                    '</span><span class="text-slateMuted">' + e[1] + '</span></li>';
+            });
+            html += '</ol></div>';
+        });
+        var night = S.some(function (e) { var h = new Date(T0 + e[0] * 60000).getHours(); return e[0] < oven && (h >= 23 || h < 6); });
+        if (night) html = '<p class="text-sm text-crustDark bg-crustLight rounded-xl p-3">Achtung: Ein Schritt liegt zwischen 23 und 6 Uhr. Starte früher oder wähle eine andere Fertigzeit.</p>' + html;
+        out.innerHTML = html;
+    };
+    var n = new Date();
+    $('tp-date').value = n.getFullYear() + '-' + pad(n.getMonth() + 1) + '-' + pad(n.getDate());
+    ['tp-time', 'tp-date'].forEach(function (i) { $(i).addEventListener('change', window.tpRender); });
+    window.tpRender();
+})();
+</script>
+</body>
+</html>
